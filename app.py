@@ -2,7 +2,7 @@ import streamlit as st
 
 # --- PAGE CONFIG ---
 st.set_page_config(
-    page_title="PreAudit — Know Your Numbers Before Your CA Does",
+    page_title="PreAudit — Know What Your Auditor Would Flag",
     page_icon="📊",
     layout="wide"
 )
@@ -10,22 +10,39 @@ st.set_page_config(
 # --- HEADER ---
 st.title("📊 PreAudit")
 st.markdown("### Pre-audit diagnostic tool for small businesses and freelancers")
-st.markdown("*Know your financial position before your CA does — run your numbers the way an auditor would, before you're ever in that room.*")
+st.markdown("#### *Know what your auditor would flag — before you're in that room.*")
+st.markdown(
+    "For freelancers, small businesses, and early-stage startups who want to "
+    "understand where they stand financially."
+)
+st.markdown("*Built using SME financial benchmarks and audit-based frameworks.*")
+
+st.markdown("""
+**What this tool does:**
+- 🔍 Identify your financial risk position
+- 📋 Assess your audit readiness
+- 🚩 Highlight what a CA or auditor would flag
+""")
+
 st.divider()
 
 # --- MODULE SELECTION ---
 st.markdown("#### Select your region to get the right framework")
-module = st.radio("", ["🇬🇧 UK — Freelancer / Small Business", "🇮🇳 India — SME / Startup"], horizontal=True)
+module = st.radio(
+    "",
+    ["🇬🇧 UK — Freelancer / Small Business", "🇮🇳 India — SME / Startup"],
+    horizontal=True
+)
 st.divider()
 
-# --- INPUTS ---
+# --- STEP 1: INPUTS ---
 st.header("Step 1 — Enter Your Financial Details")
-st.markdown("*These are the numbers an auditor or CA would ask for first. You should know them off the top of your head.*")
+st.markdown("*These are the numbers a CA or auditor would ask for first. You should know them.*")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    if "UK" in module:
+    if "🇬🇧" in module:
         st.markdown("**Revenue & Profitability**")
         revenue = st.number_input("Annual Revenue (£)", min_value=0.0, step=1000.0)
         expenses = st.number_input("Annual Expenses (£)", min_value=0.0, step=1000.0)
@@ -37,7 +54,7 @@ with col1:
         cash = st.number_input("Cash in Bank (₹)", min_value=0.0, step=5000.0)
 
 with col2:
-    if "UK" in module:
+    if "🇬🇧" in module:
         st.markdown("**Debt & Obligations**")
         debt = st.number_input("Total Debt / Liabilities (£)", min_value=0.0, step=500.0)
         fixed_costs = st.number_input("Monthly Fixed Costs (£)", min_value=0.0, step=100.0)
@@ -50,11 +67,11 @@ with col2:
 
 st.divider()
 
-# --- AUDIT CHECKLIST ---
+# --- STEP 2: AUDIT CHECKLIST ---
 st.header("Step 2 — Audit Readiness Check")
-st.markdown("*Answer honestly. A CA would ask you exactly these questions in the first ten minutes of a review.*")
+st.markdown("*Answer honestly. A CA would ask you exactly these questions in the first ten minutes.*")
 
-if "UK" in module:
+if "🇬🇧" in module:
     q1 = st.checkbox("I keep all receipts and invoices (digital or physical)")
     q2 = st.checkbox("I have a separate business bank account")
     q3 = st.checkbox("I am registered for VAT — or I know exactly where I stand on the threshold")
@@ -69,20 +86,20 @@ else:
 
 st.divider()
 
-# --- CALCULATE ---
-if st.button("Run My Pre-Audit Diagnostic", type="primary", use_container_width=True):
+# --- RUN BUTTON ---
+if st.button("Run Pre-Audit Check", type="primary", use_container_width=True):
 
     if revenue == 0:
         st.error("Please enter your annual revenue to run the diagnostic.")
 
     else:
         # --- CALCULATIONS ---
-        currency = "£" if "UK" in module else "₹"
+        currency = "£" if "🇬🇧" in module else "₹"
         profit = revenue - expenses
         profit_margin = (profit / revenue) * 100 if revenue > 0 else 0
         expense_ratio = (expenses / revenue) * 100 if revenue > 0 else 0
         debt_to_revenue = (debt / revenue) * 100 if revenue > 0 else 0
-        current_ratio = (cash + receivables) / (debt + 1)
+        current_ratio = (cash + receivables) / (debt if debt > 0 else 1)
 
         checklist = [q1, q2, q3, q4, q5]
         audit_score = (sum(checklist) / len(checklist)) * 100
@@ -90,132 +107,168 @@ if st.button("Run My Pre-Audit Diagnostic", type="primary", use_container_width=
         # --- RISK SCORING ---
         risk_points = 0
 
-        if "UK" in module:
-            if profit_margin >= 20: risk_points += 0
-            elif profit_margin >= 10: risk_points += 15
-            else: risk_points += 30
+        if "🇬🇧" in module:
+            if profit_margin >= 20:
+                risk_points += 0
+            elif profit_margin >= 10:
+                risk_points += 15
+            else:
+                risk_points += 30
         else:
-            if profit_margin >= 15: risk_points += 0
-            elif profit_margin >= 8: risk_points += 15
-            else: risk_points += 30
+            if profit_margin >= 15:
+                risk_points += 0
+            elif profit_margin >= 8:
+                risk_points += 15
+            else:
+                risk_points += 30
 
-        if current_ratio >= 2: risk_points += 0
-        elif current_ratio >= 1: risk_points += 15
-        else: risk_points += 30
+        if current_ratio >= 2:
+            risk_points += 0
+        elif current_ratio >= 1:
+            risk_points += 15
+        else:
+            risk_points += 30
 
-        if debt_to_revenue <= 30: risk_points += 0
-        elif debt_to_revenue <= 60: risk_points += 20
-        else: risk_points += 40
+        if debt_to_revenue <= 30:
+            risk_points += 0
+        elif debt_to_revenue <= 60:
+            risk_points += 20
+        else:
+            risk_points += 40
 
         overall_risk = max(0, 100 - risk_points)
+
+        # --- GOVERNANCE SCORE ---
+        governance_score = min(audit_score * 0.6 + (20 if q2 else 0) + (20 if q1 else 0), 100)
 
         # --- RED FLAGS ---
         red_flags = []
         if profit_margin < 0:
             red_flags.append("🚨 Your business is operating at a loss — expenses exceed revenue.")
         if expense_ratio > 85:
-            red_flags.append("⚠️ Expenses consuming more than 85% of revenue — very little financial buffer.")
+            red_flags.append("⚠️ Expenses are consuming more than 85% of revenue — very little financial buffer.")
         if cash < (fixed_costs * 2):
             red_flags.append("⚠️ Cash reserves below 2 months of fixed costs — liquidity risk.")
         if debt_to_revenue > 60:
             red_flags.append("🚨 Debt is high relative to revenue — significant leverage risk.")
         if current_ratio < 1:
             red_flags.append("🚨 Current ratio below 1 — may struggle to meet short-term obligations.")
-        if "UK" in module and revenue > 85000 and not q3:
+        if "🇬🇧" in module and revenue > 85000 and not q3:
             red_flags.append("⚠️ Revenue may be above the VAT threshold (£85,000). Verify your registration status immediately.")
-        if "India" in module and revenue > 2000000 and not q3:
+        if "🇮🇳" in module and revenue > 2000000 and not q3:
             red_flags.append("⚠️ Revenue may be above the GST threshold (₹20 Lakhs). Verify your registration status immediately.")
 
-        # --- ESG / GOVERNANCE SCORE ---
-        governance_score = audit_score * 0.6 + (20 if q2 else 0) + (20 if q1 else 0)
-        governance_score = min(governance_score, 100)
+        # --- TOP 3 ACTIONS ---
+        actions = []
+        if profit_margin < 0:
+            actions.append("🔴 Your business is loss-making. Review your expense structure immediately and identify what can be reduced or eliminated.")
+        if expense_ratio > 85:
+            actions.append("🔴 Reduce your expense ratio below 80% — identify your top 3 costs and assess whether each is necessary at its current level.")
+        if cash < fixed_costs * 2:
+            actions.append("🟠 Build at least 2 months of fixed cost coverage in cash reserves before taking on new commitments.")
+        if debt_to_revenue > 60:
+            actions.append("🟠 Reduce debt exposure before taking on additional financial commitments or applying for further credit.")
+        if audit_score < 60:
+            actions.append("🟡 Address your missing compliance checklist items before any CA or audit review — these are the first things an auditor checks.")
+        if current_ratio < 1:
+            actions.append("🔴 Your liquidity position is critical. Prioritise converting receivables to cash and review your short-term debt obligations.")
+        if not actions:
+            actions.append("✅ No immediate corrective action required. Maintain your current financial discipline and revisit this tool quarterly.")
 
-        # --- RESULTS HEADER ---
-        st.header("Your Pre-Audit Diagnostic Results")
+        # --- STEP 3: RESULTS ---
+        st.header("Step 3 — Your Pre-Audit Diagnostic Results")
         st.markdown("*Here is how your business looks through an auditor's lens.*")
         st.divider()
 
-        # --- THREE SCORES ---
+        # THREE SCORES
         col1, col2, col3 = st.columns(3)
 
         with col1:
             st.markdown("**Overall Financial Risk**")
             if overall_risk >= 70:
-                st.success(f"# {overall_risk:.0f} / 100\n✅ Low Risk")
+                st.success(f"## {overall_risk:.0f} / 100\n**Low Risk** ✅\n\nYour financial position is stable. Focus on maintaining controls and improving audit readiness.")
             elif overall_risk >= 45:
-                st.warning(f"# {overall_risk:.0f} / 100\n⚠️ Moderate Risk")
+                st.warning(f"## {overall_risk:.0f} / 100\n**Moderate Risk** ⚠️\n\nThere are areas that need attention. Review the audit flags and priority actions below.")
             else:
-                st.error(f"# {overall_risk:.0f} / 100\n🚨 High Risk")
+                st.error(f"## {overall_risk:.0f} / 100\n**High Risk** 🚨\n\nImmediate attention needed. Do not wait for a CA review to surface these issues.")
 
         with col2:
             st.markdown("**Audit Readiness**")
             if audit_score >= 80:
-                st.success(f"# {audit_score:.0f}%\n✅ Well Prepared")
+                st.success(f"## {audit_score:.0f}%\n**Well Prepared** ✅\n\nYour compliance foundations are solid. You are ready for a CA review.")
             elif audit_score >= 50:
-                st.warning(f"# {audit_score:.0f}%\n⚠️ Partially Prepared")
+                st.warning(f"## {audit_score:.0f}%\n**Partially Prepared** ⚠️\n\nSome compliance gaps exist. Address these before any formal review.")
             else:
-                st.error(f"# {audit_score:.0f}%\n🚨 Not Audit Ready")
+                st.error(f"## {audit_score:.0f}%\n**Not Audit Ready** 🚨\n\nSignificant compliance gaps. A CA review right now would surface multiple issues.")
 
         with col3:
             st.markdown("**Governance Score**")
             if governance_score >= 70:
-                st.success(f"# {governance_score:.0f}%\n✅ Strong Controls")
+                st.success(f"## {governance_score:.0f}%\n**Strong Controls** ✅\n\nGood internal controls and documentation practices in place.")
             elif governance_score >= 40:
-                st.warning(f"# {governance_score:.0f}%\n⚠️ Needs Attention")
+                st.warning(f"## {governance_score:.0f}%\n**Needs Attention** ⚠️\n\nSome governance gaps. Focus on documentation and separation of finances.")
             else:
-                st.error(f"# {governance_score:.0f}%\n🚨 Weak Governance")
+                st.error(f"## {governance_score:.0f}%\n**Weak Governance** 🚨\n\nSignificant control weaknesses. Priority: separate business banking and proper record keeping.")
 
         st.divider()
 
-        # --- RATIO BREAKDOWN ---
-        st.subheader("Financial Ratio Breakdown")
-        st.markdown("*These are the ratios a CA or auditor calculates in the first pass of your accounts.*")
+        # KEY FINANCIAL RATIOS
+        st.subheader("Key Financial Ratios")
+        st.markdown("*The ratios a CA calculates in the first pass of your accounts — benchmarked against SME standards.*")
 
         col1, col2 = st.columns(2)
         with col1:
             st.metric(
                 "Net Profit Margin",
                 f"{profit_margin:.1f}%",
-                help="Net profit as % of revenue. Benchmark: above 20% healthy (UK), above 15% healthy (India)."
+                help="Benchmark: ≥20% healthy (UK), ≥15% healthy (India). Below 10%/8% is high risk."
             )
             st.metric(
                 "Expense Ratio",
                 f"{expense_ratio:.1f}%",
-                help="Expenses as % of revenue. Below 80% is healthy. Above 85% is a warning signal."
+                help="Expenses as % of revenue. Below 80% healthy. Above 85% is a warning signal."
             )
         with col2:
             st.metric(
                 "Debt-to-Revenue Ratio",
                 f"{debt_to_revenue:.1f}%",
-                help="Total debt relative to annual revenue. Below 30% is low risk. Above 60% is high risk."
+                help="Total debt relative to annual revenue. Below 30% low risk. Above 60% high risk."
             )
             st.metric(
                 "Current Ratio",
                 f"{current_ratio:.2f}",
-                help="Liquidity: (cash + receivables) / debt. Above 2 is healthy. Below 1 is a risk signal."
+                help="Liquidity: (cash + receivables) / debt. Above 2.0 healthy. Below 1.0 is a risk signal."
             )
 
         st.divider()
 
-        # --- RED FLAGS ---
-        st.subheader("Red Flags")
-        st.markdown("*These are the issues a CA would flag immediately in a review.*")
+        # AUDIT FLAGS
+        st.subheader("Audit Flags")
+        st.markdown("*These are the issues a CA would flag immediately in an initial review.*")
         if red_flags:
             for flag in red_flags:
                 st.markdown(flag)
         else:
-            st.success("✅ No major red flags detected. Your numbers are telling a clean story.")
+            st.success("✅ No audit flags detected. Your numbers are telling a clean story.")
 
         st.divider()
 
-        # --- PLAIN ENGLISH SUMMARY ---
-        st.subheader("What This Means For You")
+        # TOP PRIORITY ACTIONS
+        st.subheader("Top Priority Actions")
+        st.markdown("*Based on your results, these are the most important steps to take next.*")
+        for action in actions[:3]:
+            st.markdown(f"- {action}")
+
+        st.divider()
+
+        # OVERALL ASSESSMENT
+        st.subheader("Overall Assessment")
         if overall_risk >= 70:
             summary = (
                 f"Your business is in a relatively healthy position — risk score {overall_risk:.0f}/100. "
-                f"Your profit margins and liquidity look stable. "
-                f"Your audit readiness is at {audit_score:.0f}% — "
-                f"{'focus on the checklist items you missed before your next CA review.' if audit_score < 100 else 'you are well prepared for a CA review.'}"
+                f"Profit margins and liquidity look stable. "
+                f"Your audit readiness sits at {audit_score:.0f}% — "
+                f"{'focus on the checklist gaps before your next CA review.' if audit_score < 100 else 'you are well prepared for a CA review.'}"
             )
         elif overall_risk >= 45:
             weak_area = (
@@ -227,20 +280,20 @@ if st.button("Run My Pre-Audit Diagnostic", type="primary", use_container_width=
                 f"Your business shows moderate risk — score {overall_risk:.0f}/100. "
                 f"The main area of concern is your {weak_area}. "
                 f"This is manageable now but needs attention before it becomes critical. "
-                f"Your audit readiness sits at {audit_score:.0f}% — address the checklist gaps before any CA review."
+                f"Audit readiness at {audit_score:.0f}% — address the checklist gaps before any CA review."
             )
         else:
             summary = (
                 f"Your business is showing high risk signals — score {overall_risk:.0f}/100. "
-                f"Immediate attention is needed across your expense structure, cash position, or debt levels. "
-                f"Do not wait for an audit to surface these issues. "
-                f"Use this report as a starting point for a conversation with your accountant."
+                f"Immediate attention is needed. "
+                f"Use this report as a starting point for an urgent conversation with your accountant or CA. "
+                f"Do not wait for a formal audit to surface these issues."
             )
         st.info(f"💡 {summary}")
 
         st.divider()
 
-        # --- SCENARIO TOOL ---
+        # SCENARIO / STRESS TEST
         st.subheader("Stress Test — What If?")
         st.markdown("*See how your business holds up under pressure. This is what auditors and investors model.*")
 
@@ -278,7 +331,12 @@ if st.button("Run My Pre-Audit Diagnostic", type="primary", use_container_width=
 
         st.divider()
 
-        # --- FOOTER ---
+        # DOWNLOAD BUTTON (placeholder)
+        st.button("📄 Download Full Pre-Audit Report (PDF) — Coming Soon", disabled=True)
+
+        st.divider()
+
+        # FOOTER
         st.markdown(
             "*PreAudit is a diagnostic tool, not financial advice. "
             "It does not replace your accountant, CA, or auditor. "
