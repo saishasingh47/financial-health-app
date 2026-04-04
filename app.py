@@ -21,14 +21,14 @@ for k, v in [
 if not st.session_state.mode_confirmed:
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&family=Playfair+Display:wght@700&display=swap');
-    html,body,[class*="css"]{font-family:'DM Sans',sans-serif;background:#F8F7F2;color:#111110}
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=Playfair+Display:wght@700;900&display=swap');
+    html,body,[class*="css"]{font-family:'DM Sans',sans-serif;background:#F4F5F7;color:#111214}
     #MainMenu{visibility:hidden}footer{visibility:hidden}header{visibility:hidden}
-    .block-container{padding:3rem 1.5rem;max-width:440px;margin:0 auto}
-    .popup-logo{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#111110;letter-spacing:-0.03em;margin-bottom:0.25rem}
+    .block-container{padding:3rem 1.5rem;max-width:400px;margin:0 auto}
+    .popup-logo{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#111214;letter-spacing:-0.03em;margin-bottom:0.25rem}
     .popup-logo em{font-style:normal;color:#8B0000}
-    .popup-q{font-family:'DM Mono',monospace;font-size:0.68rem;color:#787870;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1.5rem}
-    .stButton>button{background:#111110!important;color:#F8F7F2!important;border:none!important;border-radius:0!important;font-family:'DM Mono',monospace!important;font-size:0.72rem!important;letter-spacing:0.1em!important;text-transform:uppercase!important;padding:0.75rem 1.5rem!important;width:100%!important;transition:background .2s!important}
+    .popup-q{font-size:0.75rem;font-weight:500;color:#72757E;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem}
+    .stButton>button{background:#111214!important;color:#F4F5F7!important;border:none!important;border-radius:0!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.04em!important;padding:0.75rem 1.5rem!important;width:100%!important;transition:background .2s!important}
     .stButton>button:hover{background:#8B0000!important}
     </style>
     """, unsafe_allow_html=True)
@@ -52,21 +52,25 @@ if not st.session_state.mode_confirmed:
 # ── COLOUR TOKENS ─────────────────────────────────────────────
 dk = st.session_state.colour_mode == 'dark'
 
-BG    = "#111110" if dk else "#F8F7F2"
-BG2   = "#1E1E1C" if dk else "#EFEDE6"
-CARD  = "#1E1E1C" if dk else "#FFFFFF"
-TEXT  = "#F2F2EE" if dk else "#111110"
-TEXT2 = "#888880" if dk else "#787870"
-RULE  = "#333330" if dk else "#D8D6CE"
+BG    = "#111214" if dk else "#F4F5F7"
+BG2   = "#1C1E22" if dk else "#E8EAEE"
+CARD  = "#1C1E22" if dk else "#FFFFFF"
+TEXT  = "#F0F1F3" if dk else "#111214"
+TEXT2 = "#888A93" if dk else "#72757E"
+RULE  = "#2E3038" if dk else "#CACDD5"
 RED   = "#8B0000"
-GR_T  = "#4ade80" if dk else "#1C5E30"
-GR_BG = "rgba(74,222,128,0.08)" if dk else "#e8f5ee"
-AM_T  = "#fbbf24" if dk else "#7a4a0a"
-AM_BG = "rgba(251,191,36,0.08)" if dk else "#fdf3e3"
+ACCENT = "#D6E6F2"
+# Pastel status colours — for technical result displays only
+GR_T  = "#B8D9C2" if dk else "#1C5E30"
+GR_BG = "rgba(184,217,194,0.1)" if dk else "#EAF5EF"
+AM_T  = "#F5E0A8" if dk else "#7A5910"
+AM_BG = "rgba(245,224,168,0.1)" if dk else "#FBF4E0"
+RD_T  = "#F4BBBB" if dk else "#8B0000"
+RD_BG = "rgba(244,187,187,0.1)" if dk else "#FDECEC"
 
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
 html,body,[class*="css"]{{font-family:'DM Sans',sans-serif;background:{BG};color:{TEXT}}}
 #MainMenu{{visibility:hidden}}footer{{visibility:hidden}}header{{visibility:hidden}}
@@ -78,56 +82,64 @@ h1,h2,h3{{font-family:'Playfair Display',serif;color:{TEXT}}}
 .mast-row{{display:flex;justify-content:space-between;align-items:baseline}}
 .mast-logo{{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:{TEXT};letter-spacing:-0.03em;line-height:1}}
 .mast-logo em{{font-style:normal;color:{RED}}}
-.mast-tag{{font-family:'DM Mono',monospace;font-size:0.65rem;color:{RED};text-transform:uppercase;letter-spacing:0.15em}}
-.mast-sub{{font-family:'DM Mono',monospace;font-size:0.62rem;color:{TEXT2};border-top:1px solid {RULE};padding-top:0.4rem;margin-top:0.4rem;letter-spacing:0.04em}}
+.mast-tag{{font-size:0.7rem;font-weight:500;color:{RED};text-transform:uppercase;letter-spacing:0.1em}}
+.mast-sub{{font-size:0.7rem;color:{TEXT2};border-top:1px solid {RULE};padding-top:0.4rem;margin-top:0.4rem}}
 
 /* Mode toggle link */
-.mode-link{{font-family:'DM Mono',monospace;font-size:0.62rem;color:{TEXT2};cursor:pointer;text-decoration:underline;text-underline-offset:2px}}
+.mode-link{{font-size:0.7rem;color:{TEXT2};cursor:pointer;text-decoration:underline;text-underline-offset:2px}}
 
 /* Rules */
 .rule{{height:1px;background:{RULE};margin:1.5rem 0}}
 .rule-heavy{{height:2px;background:{TEXT};margin:2rem 0}}
-.kicker{{font-family:'DM Mono',monospace;font-size:0.65rem;color:{RED};text-transform:uppercase;letter-spacing:0.18em;margin-bottom:0.3rem}}
+.kicker{{font-size:0.7rem;font-weight:500;color:{RED};text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}}
 
 /* Steps */
 .step-row{{display:flex;align-items:center;gap:0.6rem;margin-bottom:1rem}}
-.step-dot{{width:22px;height:22px;background:{RED};color:white;font-family:'DM Mono',monospace;font-size:0.7rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}}
-.step-lbl{{font-family:'DM Mono',monospace;font-size:0.68rem;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:{TEXT}}}
+.step-dot{{width:22px;height:22px;background:{RED};color:white;font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}}
+.step-lbl{{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:{TEXT}}}
 
 /* Combined score hero */
-.score-hero{{background:#111110;padding:2rem 1.75rem;text-align:center;margin:1rem 0}}
-.sh-lbl{{font-family:'DM Mono',monospace;font-size:0.58rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:0.5rem}}
+.score-hero{{background:#111214;padding:2rem 1.75rem;text-align:center;margin:1rem 0}}
+.sh-lbl{{font-size:0.65rem;font-weight:500;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:0.5rem}}
 .sh-num{{font-family:'Playfair Display',serif;font-size:4.5rem;font-weight:900;line-height:1;margin-bottom:0.3rem}}
-.sh-status{{font-size:0.85rem;font-weight:600;margin-bottom:0.25rem}}
-.sh-sub{{font-family:'DM Mono',monospace;font-size:0.6rem;color:rgba(255,255,255,0.28)}}
+.sh-status{{font-size:0.88rem;font-weight:600;margin-bottom:0.25rem}}
+.sh-sub{{font-size:0.68rem;color:rgba(255,255,255,0.28)}}
 .sh-breakdown{{display:flex;justify-content:center;gap:2.5rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.08)}}
 .sh-b{{text-align:center}}
 .sh-b-v{{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700}}
-.sh-b-l{{font-family:'DM Mono',monospace;font-size:0.56rem;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.15rem}}
+.sh-b-l{{font-size:0.62rem;font-weight:500;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.15rem}}
+
+/* Score summary table */
+.score-summary-table{{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.875rem}}
+.score-summary-table th{{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:{TEXT2};padding:0.5rem 0.75rem;border-bottom:2px solid {TEXT};text-align:left}}
+.score-summary-table td{{padding:0.65rem 0.75rem;border-bottom:1px solid {RULE};color:{TEXT};vertical-align:middle}}
+.score-summary-table tr:hover td{{background:{BG2}}}
+.sst-score{{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700}}
+.sst-badge{{display:inline-block;font-size:0.7rem;font-weight:500;padding:0.18rem 0.55rem}}
 
 /* Score row */
 .score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:{RULE};border:1px solid {RULE};margin:1rem 0}}
 .score-cell{{background:{BG};padding:1.25rem 1rem;text-align:center}}
-.score-cell-lbl{{font-family:'DM Mono',monospace;font-size:0.58rem;color:{TEXT2};text-transform:uppercase;letter-spacing:0.14em;margin-bottom:0.5rem}}
+.score-cell-lbl{{font-size:0.65rem;font-weight:500;color:{TEXT2};text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}}
 .score-cell-num{{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;line-height:1;margin-bottom:0.35rem}}
-.score-cell-status{{font-family:'DM Mono',monospace;font-size:0.66rem;font-weight:500;padding:0.2rem 0.6rem;display:inline-block}}
+.score-cell-status{{font-size:0.7rem;font-weight:500;padding:0.2rem 0.6rem;display:inline-block}}
 .s-green{{color:{GR_T};background:{GR_BG}}}
 .s-amber{{color:{AM_T};background:{AM_BG}}}
-.s-red{{color:{RED};background:{"rgba(139,0,0,0.12)" if dk else "#fdecea"}}}
+.s-red{{color:{RD_T};background:{RD_BG}}}
 
 /* Ratio table */
 .ratio-table{{width:100%;border-collapse:collapse;font-size:0.875rem;margin:1rem 0}}
-.ratio-table th{{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:500;text-transform:uppercase;letter-spacing:0.14em;color:{TEXT2};padding:0.5rem 0.75rem;border-bottom:2px solid {TEXT};text-align:left}}
+.ratio-table th{{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:{TEXT2};padding:0.5rem 0.75rem;border-bottom:2px solid {TEXT};text-align:left}}
 .ratio-table td{{padding:0.7rem 0.75rem;border-bottom:1px solid {RULE};color:{TEXT};vertical-align:top}}
 .ratio-table tr:hover td{{background:{BG2}}}
 .r-val{{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700}}
-.r-explain{{font-family:'DM Mono',monospace;font-size:0.6rem;color:{TEXT2};display:block;margin-top:0.2rem;font-style:italic;line-height:1.45}}
-.r-good{{color:{GR_T}}}.r-warn{{color:{AM_T}}}.r-bad{{color:{RED}}}
+.r-explain{{font-size:0.7rem;color:{TEXT2};display:block;margin-top:0.2rem;font-style:italic;line-height:1.45}}
+.r-good{{color:{GR_T}}}.r-warn{{color:{AM_T}}}.r-bad{{color:{RD_T}}}
 
-/* Flags */
+/* Flags — pastel colours */
 .flag{{padding:0.75rem 1rem;margin:0.4rem 0;border-left:3px solid;font-size:0.875rem;line-height:1.5}}
-.flag-crit{{border-color:{RED};background:{"rgba(139,0,0,0.1)" if dk else "#fdecea"};color:{"#f87171" if dk else "#5a1010"}}}
-.flag-warn{{border-color:#C17A2A;background:{"rgba(193,122,42,0.1)" if dk else "#fdf3e3"};color:{"#fbbf24" if dk else "#6b4010"}}}
+.flag-crit{{border-color:{RD_T};background:{RD_BG};color:{RD_T}}}
+.flag-warn{{border-color:{AM_T};background:{AM_BG};color:{AM_T}}}
 .flag-ok{{border-color:{GR_T};background:{GR_BG};color:{GR_T}}}
 
 /* Actions */
@@ -135,52 +147,52 @@ h1,h2,h3{{font-family:'Playfair Display',serif;color:{TEXT}}}
 .action-num{{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:{RED};line-height:1;flex-shrink:0;min-width:20px}}
 
 /* ESG plan */
-.esg-plan{{margin:0.4rem 0;border:1px solid {"rgba(74,222,128,0.2)" if dk else "#d1fae5"}}}
-.esg-plan-header{{background:{"rgba(28,94,48,0.3)" if dk else "#1C5E30"};color:{"#4ade80" if dk else "white"};padding:0.6rem 1rem;font-family:'DM Mono',monospace;font-size:0.65rem;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;display:flex;justify-content:space-between}}
+.esg-plan{{margin:0.4rem 0;border:1px solid {"rgba(184,217,194,0.2)" if dk else "#C8E6D0"}}}
+.esg-plan-header{{background:{"rgba(28,94,48,0.25)" if dk else "#1C5E30"};color:{"#B8D9C2" if dk else "white"};padding:0.6rem 1rem;font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;display:flex;justify-content:space-between}}
 .esg-plan-body{{padding:0.85rem 1rem;background:{GR_BG};font-size:0.875rem;line-height:1.65;color:{TEXT}}}
 .esg-plan-body strong{{color:{GR_T}}}
 
 /* ESG indicators grid */
 .esg-grid{{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.75rem 0}}
-.esg-item{{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;background:{BG2};border:1px solid {RULE};font-family:'DM Mono',monospace;font-size:0.72rem;color:{TEXT}}}
+.esg-item{{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;background:{BG2};border:1px solid {RULE};font-size:0.8rem;color:{TEXT}}}
 .esg-pass{{border-left:3px solid {GR_T}}}
-.esg-fail{{border-left:3px solid {RED};opacity:0.55}}
+.esg-fail{{border-left:3px solid {RD_T};opacity:0.55}}
 
 /* Summary */
-.summary{{background:#111110;color:#F2F2EE;padding:1.5rem;margin:1rem 0;font-size:0.9rem;line-height:1.7}}
-.summary-kicker{{font-family:'DM Mono',monospace;font-size:0.6rem;color:#C17A2A;text-transform:uppercase;letter-spacing:0.18em;margin-bottom:0.5rem}}
+.summary{{background:#111214;color:#F0F1F3;padding:1.5rem;margin:1rem 0;font-size:0.9rem;line-height:1.7}}
+.summary-kicker{{font-size:0.68rem;font-weight:500;color:#F5E0A8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}}
 
 /* Stress */
 .stress-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:{RULE};border:1px solid {RULE};margin:1rem 0}}
 .stress-cell{{background:{BG};padding:1rem;text-align:center}}
-.stress-cell-l{{font-family:'DM Mono',monospace;font-size:0.58rem;color:{TEXT2};text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}}
+.stress-cell-l{{font-size:0.65rem;font-weight:500;color:{TEXT2};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem}}
 .stress-cell-v{{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:{TEXT}}}
-.stress-cell-d{{font-family:'DM Mono',monospace;font-size:0.68rem;margin-top:0.2rem}}
-.d-neg{{color:{RED}}}.d-pos{{color:{GR_T}}}
+.stress-cell-d{{font-size:0.72rem;margin-top:0.2rem}}
+.d-neg{{color:{RD_T}}}.d-pos{{color:{GR_T}}}
 
 /* Pro gate */
-.pro-gate{{background:#111110;padding:1.75rem;text-align:center}}
-.pro-gate-lbl{{font-family:'DM Mono',monospace;font-size:0.65rem;font-weight:500;text-transform:uppercase;letter-spacing:0.15em;color:{RED};margin-bottom:0.5rem}}
+.pro-gate{{background:#111214;padding:1.75rem;text-align:center}}
+.pro-gate-lbl{{font-size:0.7rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:{RED};margin-bottom:0.5rem}}
 .pro-gate p{{font-size:0.875rem;color:rgba(255,255,255,0.55);line-height:1.65;margin-bottom:0.5rem}}
 .pro-gate strong{{color:white}}
 
 /* Chat */
 .chat-wrap{{border:1px solid {RULE};background:{CARD};margin:1rem 0}}
-.chat-header{{background:#111110;color:#F2F2EE;padding:0.75rem 1rem;font-family:'DM Mono',monospace;font-size:0.65rem;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;display:flex;justify-content:space-between;align-items:center}}
-.chat-badge{{font-family:'DM Mono',monospace;font-size:0.58rem;background:{RED};color:white;padding:0.14rem 0.5rem;letter-spacing:0.06em}}
+.chat-header{{background:#111214;color:#F0F1F3;padding:0.75rem 1rem;font-size:0.72rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;display:flex;justify-content:space-between;align-items:center}}
+.chat-badge{{font-size:0.65rem;background:{RED};color:white;padding:0.14rem 0.5rem}}
 .chat-user{{background:{BG2};border-left:3px solid {TEXT};padding:0.75rem 1rem;margin:0.5rem;font-size:0.875rem;color:{TEXT}}}
 .chat-assistant{{background:{CARD};border-left:3px solid {RED};padding:0.75rem 1rem;margin:0.5rem;font-size:0.875rem;line-height:1.65;color:{TEXT}}}
-.chat-lbl{{font-family:'DM Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.35rem}}
+.chat-lbl{{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem}}
 .chat-user .chat-lbl{{color:{TEXT2}}}
 .chat-assistant .chat-lbl{{color:{RED}}}
 
 /* Legal */
-.legal-disclaimer{{border-top:1px solid {RULE};padding-top:1rem;margin-top:2rem;font-family:'DM Mono',monospace;font-size:0.65rem;color:{TEXT2};line-height:1.65}}
+.legal-disclaimer{{border-top:1px solid {RULE};padding-top:1rem;margin-top:2rem;font-size:0.72rem;color:{TEXT2};line-height:1.65}}
 
-/* Buttons */
-.stButton>button{{background:#111110!important;color:#F2F2EE!important;border:1px solid #111110!important;border-radius:0!important;padding:0.7rem 1.5rem!important;font-family:'DM Mono',monospace!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.08em!important;text-transform:uppercase!important;transition:all .2s!important;width:100%!important}}
-.stButton>button:hover{{background:{RED}!important;border-color:{RED}!important}}
-.stButton>button:disabled{{background:{RULE}!important;border-color:{RULE}!important;color:{TEXT2}!important}}
+/* Buttons — red primary, matches website */
+.stButton>button{{background:{RED}!important;color:white!important;border:none!important;border-radius:0!important;padding:0.7rem 1.5rem!important;font-family:'DM Sans',sans-serif!important;font-size:0.85rem!important;font-weight:500!important;letter-spacing:0.04em!important;transition:all .2s!important;width:100%!important}}
+.stButton>button:hover{{background:#A50000!important}}
+.stButton>button:disabled{{background:{RULE}!important;color:{TEXT2}!important}}
 
 /* Inputs */
 .stTextInput>div>div>input{{border-radius:0!important;border:1px solid {RULE}!important;background:{CARD}!important;color:{TEXT}!important;font-family:'DM Sans',sans-serif!important;font-size:0.9rem!important}}
@@ -571,25 +583,84 @@ if st.session_state.results_ready:
     <div class="score-row">
         <div class="score-cell">
             <div class="score-cell-lbl">Financial risk</div>
-            <div class="score-cell-num" style="color:{'#1C5E30' if d['financial_score']>=70 else '#7a4a0a' if d['financial_score']>=45 else '#8B0000'}">{d['financial_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">/100</span></div>
+            <div class="score-cell-num" style="color:{GR_T if d['financial_score']>=70 else AM_T if d['financial_score']>=45 else RD_T}">{d['financial_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">/100</span></div>
             <span class="score-cell-status {d['fs_cls']}">{d['fs_lbl']}</span>
         </div>
         <div class="score-cell">
             <div class="score-cell-lbl">Compliance readiness</div>
-            <div class="score-cell-num" style="color:{'#1C5E30' if d['audit_score']>=80 else '#7a4a0a' if d['audit_score']>=50 else '#8B0000'}">{d['audit_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">%</span></div>
+            <div class="score-cell-num" style="color:{GR_T if d['audit_score']>=80 else AM_T if d['audit_score']>=50 else RD_T}">{d['audit_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">%</span></div>
             <span class="score-cell-status {d['as_cls']}">{d['as_lbl']}</span>
         </div>
         <div class="score-cell">
             <div class="score-cell-lbl">ESG governance</div>
-            <div class="score-cell-num" style="color:{'#1C5E30' if d['esg_score']>=70 else '#7a4a0a' if d['esg_score']>=40 else '#8B0000'}">{d['esg_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">%</span></div>
+            <div class="score-cell-num" style="color:{GR_T if d['esg_score']>=70 else AM_T if d['esg_score']>=40 else RD_T}">{d['esg_score']:.0f}<span style="font-size:1.1rem;color:{TEXT2};font-weight:400">%</span></div>
             <span class="score-cell-status {d['es_cls']}">{d['es_lbl']}</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
+    # Score summary table — full breakdown at a glance
+    st.markdown(f'<div class="kicker" style="margin-top:1.5rem">Full score breakdown</div>', unsafe_allow_html=True)
+
+    def score_colour(val, t1, t2):
+        return GR_T if val >= t1 else AM_T if val >= t2 else RD_T
+    def score_bg(val, t1, t2):
+        return GR_BG if val >= t1 else AM_BG if val >= t2 else RD_BG
+    def score_lbl_map(val, t1, t2, labels):
+        return labels[0] if val >= t1 else labels[1] if val >= t2 else labels[2]
+
+    table_rows = f"""
+    <tr style="border-bottom:2px solid {TEXT}">
+        <td style="font-size:0.88rem;font-weight:700;color:{TEXT};padding:0.7rem 0.75rem">Combined Smit Score</td>
+        <td style="padding:0.7rem 0.75rem"><span style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:{d['comb_col']}">{d['combined_score']}/100</span></td>
+        <td style="padding:0.7rem 0.75rem"><span class="sst-badge" style="color:{d['comb_col']};background:{'rgba(214,230,242,0.15)' if dk else '#EEF4FA'}">{d['comb_lbl']}</span></td>
+    </tr>
+    <tr>
+        <td style="font-size:0.85rem;color:{TEXT};padding:0.65rem 0.75rem;padding-left:1.5rem">Financial risk score</td>
+        <td style="padding:0.65rem 0.75rem"><span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:{score_colour(d['financial_score'],70,45)}">{d['financial_score']:.0f}/100</span></td>
+        <td style="padding:0.65rem 0.75rem"><span class="sst-badge" style="color:{score_colour(d['financial_score'],70,45)};background:{score_bg(d['financial_score'],70,45)}">{score_lbl_map(d['financial_score'],70,45,['Low risk','Moderate','High risk'])}</span></td>
+    </tr>
+    <tr>
+        <td style="font-size:0.85rem;color:{TEXT};padding:0.65rem 0.75rem;padding-left:1.5rem">Compliance readiness</td>
+        <td style="padding:0.65rem 0.75rem"><span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:{score_colour(d['audit_score'],80,50)}">{d['audit_score']:.0f}%</span></td>
+        <td style="padding:0.65rem 0.75rem"><span class="sst-badge" style="color:{score_colour(d['audit_score'],80,50)};background:{score_bg(d['audit_score'],80,50)}">{score_lbl_map(d['audit_score'],80,50,['Prepared','Partial','Not ready'])}</span></td>
+    </tr>
+    <tr style="border-bottom:2px solid {TEXT}">
+        <td style="font-size:0.85rem;color:{TEXT};padding:0.65rem 0.75rem;padding-left:1.5rem">ESG governance (overall)</td>
+        <td style="padding:0.65rem 0.75rem"><span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:{score_colour(d['esg_score'],70,40)}">{d['esg_score']:.0f}%</span></td>
+        <td style="padding:0.65rem 0.75rem"><span class="sst-badge" style="color:{score_colour(d['esg_score'],70,40)};background:{score_bg(d['esg_score'],70,40)}">{score_lbl_map(d['esg_score'],70,40,['Strong','Developing','Needs work'])}</span></td>
+    </tr>
+    <tr>
+        <td style="font-size:0.82rem;color:{TEXT2};padding:0.6rem 0.75rem;padding-left:2.5rem;font-style:italic">G — Governance pillar</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.85rem;color:{score_colour(d['g_score'],70,40)}">{d['g_score']:.0f}%</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.8rem;color:{score_colour(d['g_score'],70,40)}">{score_lbl_map(d['g_score'],70,40,['Strong','Developing','Weak'])}</td>
+    </tr>
+    <tr>
+        <td style="font-size:0.82rem;color:{TEXT2};padding:0.6rem 0.75rem;padding-left:2.5rem;font-style:italic">S — Social pillar</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.85rem;color:{score_colour(d['s_score'],70,40)}">{d['s_score']:.0f}%</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.8rem;color:{score_colour(d['s_score'],70,40)}">{score_lbl_map(d['s_score'],70,40,['Strong','Developing','Weak'])}</td>
+    </tr>
+    <tr>
+        <td style="font-size:0.82rem;color:{TEXT2};padding:0.6rem 0.75rem;padding-left:2.5rem;font-style:italic">E — Environmental pillar</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.85rem;color:{score_colour(d['e_score'],70,40)}">{d['e_score']:.0f}%</td>
+        <td style="padding:0.6rem 0.75rem;font-size:0.8rem;color:{score_colour(d['e_score'],70,40)}">{score_lbl_map(d['e_score'],70,40,['Strong','Developing','Weak'])}</td>
+    </tr>
+    """
+
+    st.markdown(f"""
+    <table class="score-summary-table">
+        <thead><tr>
+            <th>Category</th>
+            <th>Score</th>
+            <th>Status</th>
+        </tr></thead>
+        <tbody>{table_rows}</tbody>
+    </table>
+    """, unsafe_allow_html=True)
+
     # Ratios
     st.markdown(f'<div class="kicker" style="margin-top:1.5rem">Key financial ratios</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="font-family:\'DM Mono\',monospace;font-size:0.6rem;color:{TEXT2};margin-bottom:0.75rem">Benchmarked against HMRC (UK) · RBI (India) · Bank of England · World Bank data</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-size:0.72rem;color:{TEXT2};margin-bottom:0.75rem">Benchmarked against HMRC (UK) · RBI (India) · Bank of England · World Bank data</p>', unsafe_allow_html=True)
 
     def rc(m,v,uk):
         if m=="margin": t,w=(20,10) if uk else (15,8); return "r-good" if v>=t else "r-warn" if v>=w else "r-bad"
@@ -610,8 +681,8 @@ if st.session_state.results_ready:
             <td><strong style="color:{TEXT}">Net profit margin</strong><span class="r-explain">Revenue minus costs, as % of revenue. How much remains from each {d['currency']} earned after all expenses.</span></td>
             <td style="font-size:0.72rem;color:{TEXT2}">Profitability</td>
             <td class="r-val {mc}">{d['profit_margin']:.1f}%</td>
-            <td style="font-family:'DM Mono',monospace;font-size:0.68rem;color:{TEXT2}">{bm}</td>
-            <td class="{mc}" style="font-family:'DM Mono',monospace;font-size:0.72rem">{st_(mc)}</td>
+            <td style="font-size:0.72rem;color:{TEXT2}">{bm}</td>
+            <td class="{mc}" style="font-size:0.8rem">{st_(mc)}</td>
         </tr>
         <tr>
             <td><strong style="color:{TEXT}">Expense ratio</strong><span class="r-explain">Total expenses as % of revenue. Higher values may indicate limited resilience to cost or revenue changes.</span></td>
